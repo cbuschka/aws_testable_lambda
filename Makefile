@@ -1,7 +1,12 @@
 test:	init
-	. ${PWD}/venv/bin/activate && PYTHONPATH=${PWD} python -m unittest discover -t ${PWD} -s ${PWD} -p '*_test.py'	
+	. ${PWD}/venv/bin/activate && \
+	PYTHONPATH=${PWD}:${PWD}/tests python -m unittest discover -p '*_test.py' tests/
 
 init:
 	if [ ! -d "${PWD}/venv/" ] || [ ! -z "${FORCE}" ]; then \
-		. ${PWD}/venv/bin/activate && pip install -r ${PWD}/requirements.txt; \
+		virtualenv venv/; \
+		$(MAKE) install_deps; \
 	fi
+
+install_deps:
+	. ${PWD}/venv/bin/activate && pip install -r ${PWD}/requirements.txt
